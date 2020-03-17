@@ -53,8 +53,43 @@ Treinamento Portinari com integração com ERP TOTVS Microsiga Protheus 12.1.25 
         ]
         ```
         Tema do portinari: "./node_modules/@portinari/style/css/po-theme-default.min.css",
-              
 
+2. Criando o Componente Long 
+``` ng g c login   ```
+3. Criando o Serviço login para fazer a comunicação com o backend
+```  cd .\src\app\login\  ```
+```  ng g s login ``` 
+4. Adicionando nosso componente no arquivo de rotas  **app-routing.module.ts**
+```     const routes: Routes = [
+        { path: '/login', component: LoginComponent, pathMatch: 'full'  },
+        ];
+``` 
+5. Adicionar nosso  ``` <router-outlet></router-outlet>  ``` ** app.component.html** 
+```
+<div class="po-wrapper">
+  <po-toolbar p-title="AppName"></po-toolbar>
+
+  <po-menu [p-menus]="menus"></po-menu>
+
+  <po-page-default p-title="AppName">
+    <router-outlet></router-outlet>
+  </po-page-default>
+</div>
+```
+6. Adicionar no meno a chamada par ao login ``` app.component.ts ```
+```
+  readonly menus: Array<PoMenuItem> = [
+    { label: 'Home', action: this.onClick.bind(this) },
+    { label: 'Login', link: '\login' }
+  ];
+```
+7. *TIP Adicionar useHash no arquivo ** app-routing.module.ts **
+```
+@NgModule({
+  imports: [RouterModule.forRoot(routes,{ useHash: true })],
+  exports: [RouterModule]
+})
+```
 
 
 ## Aprendizado contínuo
