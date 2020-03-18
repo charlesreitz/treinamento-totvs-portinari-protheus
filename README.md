@@ -1,26 +1,31 @@
 # Treinamento TOTVS Portinari com ERP TOTVS Microsiga Protheus
 Treinamento Portinari com integração com ERP TOTVS Microsiga Protheus 12.1.25 ou superior
 
-##Pré-requisitos
+## Pré-requisitos
 * Conhecimento em HTML
 * JavaScriptType Script 
 * Angular 8  (https://loiane.training/curso/angular  - Grátis) 
 * Protheus - WebService REST
 * GIT 
 * Fazer os primeiros passos do Portinari (https://portinari.io/guides/getting-started)
-
-##Estrutura Necessária
  * Possuir uma instalação do protheus funcionando na versão 12.1.25 ou superior
  * Possui webservice rest protheus configurado  (https://tdn.totvs.com/pages/viewpage.action?pageId=75268866 ) 
  * NODE instalado na maquina  (https://nodejs.org/en/ ) 
  * NG CLI (https://cli.angular.io/)
 
-##Escopo
-1.  Iniciando Projeto com Portinari (https://portinari.io/guides/getting-started)
+## Escopo
+1. Criado a tela de LOGIN (https://portinari.io/guides/getting-started)
+2. Criando intercept para enviar o token para a API
+3. Validando acessos dentro do angular via roteamento 
+4. Boas Prática de resposta de WebService REST 
+5. Colocando em produção, configurando SSL  do Rest Protheus
+
+
+
 2.  Bonus - GIT (code.engpro.com.br) NG SERVENG BUILDComo publicar o projeto * Atualização do PO? * package.json
 
 
-##Lista, fazendo um bolo de fuba (let´s work)
+## Lista, fazendo um bolo de fuba (let´s work)
 1. Seguir o passo a paso do https://portinari.io/guides/getting-started
   a. npm i -g @angular/cli@8.0.0
   b. ng new my-po-project --skipInstall
@@ -91,9 +96,26 @@ Treinamento Portinari com integração com ERP TOTVS Microsiga Protheus 12.1.25 
 })
 ```
 
+8. Criação dos serviços de login e chamadas das rotinas de autenticação
+
+9. Criação do intercept
+
+
+10. Criação do CANACTIVE
+
+11. ngx-cookie-service para salvar os dados nos cookies (https://www.npmjs.com/package/ngx-cookie-service)
+``` npm install --save ngx-cookie-service ``` 
+
+12. Ler um JSON na produção para configurar o local da API (config.json)
+
+13. registerLocaleData ptbr
+
+14. Lazy Load 
+
+15. SubModulos
 
 ## Aprendizado contínuo
 1. Automatização de teste
 2. Docker 
 3. DEV-OPS 
-
+4. Internacionalização 

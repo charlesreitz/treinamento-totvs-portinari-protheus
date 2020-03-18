@@ -22,6 +22,7 @@
     "@portinari/portinari-templates": "^1.28.0",
     "@portinari/portinari-ui": "^1.28.0",
     "@totvs/portinari-theme": "^1.28.0",
+    "ngx-cookie-service": "^3.0.2",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
