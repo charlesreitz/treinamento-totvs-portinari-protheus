@@ -114,6 +114,10 @@ Treinamento Portinari com integração com ERP TOTVS Microsiga Protheus 12.1.25 
 
 15. SubModulos
 
+16. NG BUIKD 
+
+17. Configurando HTTPS e HTTPS Serviço Protheus 
+
 ## Aprendizado contínuo
 1. Automatização de teste
 2. Docker 
