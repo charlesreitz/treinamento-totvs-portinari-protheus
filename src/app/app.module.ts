@@ -17,12 +17,16 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { switchMap, map, filter, catchError, take, finalize, mergeMap } from 'rxjs/operators';
 import { Observable, BehaviorSubject, Subject, ObservableInput, throwError } from 'rxjs';
 import { of } from '../../node_modules/rxjs';
+import { ClienteListComponent } from './cliente-list/cliente-list.component';
+import { ClienteEditComponent } from './cliente-edit/cliente-edit.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    ClienteListComponent,
+    ClienteEditComponent
   ],
   imports: [
     BrowserModule,

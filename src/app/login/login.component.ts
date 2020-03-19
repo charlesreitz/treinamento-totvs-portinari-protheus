@@ -25,16 +25,17 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  // canActivate(
-  //   route: ActivatedRouteSnapshot,
-  //   state: RouterStateSnapshot): Observable<boolean> | boolean {
-  //   const allowedRoles = route.data.allowedRoles;
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean> | boolean {
+    // const allowedRoles = route.data.allowedRoles;
 
-  //   if (this.loginService.isLogged() ) {
-  //     this.router.navigate(['/login']);
-  //     return false;
-  //   }
-  // }
+    if (!this.loginService.isLogged()) {
+      this.router.navigate(['/login']);
+      return false;
+    }
+    return true;
+  }
 
   public loginSubmit(formData: PoPageLogin) {
     let login = formData.login

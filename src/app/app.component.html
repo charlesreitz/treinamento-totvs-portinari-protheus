@@ -1,8 +1,10 @@
-<div class="po-wrapper">
-  <po-toolbar p-title="Treinamento Portinari Protheus"></po-toolbar>
+<div *ngIf="loginService.isLogged()" class="po-wrapper">
+  <po-toolbar  p-title="Treinamento Portinari Protheus"></po-toolbar>
 
-  <po-menu [p-menus]="menus"></po-menu>
+  <po-menu [p-menus]="menus" ></po-menu>
 
   <router-outlet></router-outlet>
 
 </div>
+
+<router-outlet *ngIf="!loginService.isLogged()"  ></router-outlet>
