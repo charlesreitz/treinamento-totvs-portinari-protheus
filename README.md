@@ -143,6 +143,10 @@ Ao final do treinamento aluno estará capacitada para montar um portal web com a
 * https://api.totvs.com.br/guia
 
 
+20. Segurança
+* JWT
+* SSL
+* Tratar acesso com MENUDEF +    no Protheus
 ## Aprendizado contínuo
 1. Automatização de teste
 2. Docker 
