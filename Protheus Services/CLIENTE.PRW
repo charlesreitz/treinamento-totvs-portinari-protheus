@@ -3,7 +3,7 @@
 #INCLUDE "RESTFUL.CH"
 #INCLUDE "fileio.ch"
 /*/{Protheus.doc} PCIClienteOrdemServico
-    Planejamento Controle ImplantaÃ§Ã£o Cliente
+    Planejamento Controle Implantação Cliente
     @type  Function
     @author CHARLES REITZ 
     @since 01/07/2019
@@ -41,21 +41,44 @@ END WSRESTFUL
 //PATHPARAM 
 
 WSMETHOD GET CLIENTE_V1 WSSERVICE CLIENTE
-    Local lRet := .F.
-    Local cIPOrig	:= if(!Empty(oWSRest:GetHeader('X-Forwarded-For')),oWSRest:GetHeader('X-Forwarded-For'),oWSRest:GetHeader('__IPCONN__'))
+    Local nCount
+    Local nINc  :=   0 
 
     self:SetContentType("application/json")
 	self:SetHeader('Access-Control-Allow-Credentials' , "true")
     
-    Begin Sequence 
 
-        //SetRestFault(400,cMsgRet,.T.,400,/*cDetailMsg*/,/*cHelpUrl*/,/*aDetails*/)
-        ::SetResponse("{}")
-        lRet    := .F.
-    End Sequence        
+        
+    Beginsql alias "TRB"
+        SELECT A1_COD, A1_LOJA, A1_NOME FROM %table:SA1% 
+        WHERE 
+        A1_FILIAL = %xFilial:SA1%
+        and %notdel%
+       
+    EndSql
+    Count to nCount 
+    
+    TRB->(dbGoTop())
+
+    ::SetResponse("[")
+    While TRB->(!Eof())
+        nINc++
+        ::SetResponse(' {  "A1_COD":"'+TRB->A1_COD+'"   ,')
+        ::SetResponse('    "A1_LOJA":"'+TRB->A1_LOJA+'"  ,')
+        ::SetResponse('    "A1_NOME":"'+TRB->A1_NOME+'"   ')
+        If nINc < nCount
+            ::SetResponse(",")
+        EndIf
+        ::SetResponse(' } ')
+
+        TRB->(dbSkip())
+    EndDo
+    ::SetResponse("]")
+
+    TRB->(dbCloseArea())
 
 
-Return lRet
+Return .T.
 
 WSMETHOD GET IDCLIENTE_V1 WSSERVICE CLIENTE
     Local lRet := .F.

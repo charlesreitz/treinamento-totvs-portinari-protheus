@@ -14,6 +14,7 @@ export class AppComponent {
 
   readonly menus: Array<PoMenuItem> = [
     { label: 'Home', link: '\home' },
+    { label: 'Cliente', link: '\client-list' },
     // { label: 'Login', link: '\login' },
     {
       label: 'Sair', action: () => (this.loginService.logout(),
