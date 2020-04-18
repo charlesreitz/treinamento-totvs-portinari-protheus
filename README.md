@@ -120,6 +120,7 @@ Ao final do treinamento aluno estará capacitada para montar um portal web com a
 9. Criação dos serviços de login e chamadas das rotinas de autenticação
 
 10. Criação do intercept (interceptor.module.ts)
+ ``` ng g m teste ```
 
 11. Criação do CANACTIVE para bloquear acessos a paginas
 

@@ -16,24 +16,16 @@
 /*/
 WSRESTFUL CLIENTE DESCRIPTION "" FORMAT "application/json"
 
-	WSDATA QUICKSEARCH 		AS STRING OPTIONAL
-	WSDATA PAGE 			AS INTEGER OPTIONAL
-	WSDATA LIMIT 			AS INTEGER OPTIONAL
-	WSDATA ID				AS INTEGER OPTIONAL
-	WSDATA STATUS			AS STRING OPTIONAL
-	WSDATA EMPRESA			AS STRING OPTIONAL
-	WSDATA DATADE			AS DATE OPTIONAL
-	WSDATA DATAATE			AS DATE OPTIONAL
-	WSDATA PROJETO			AS STRING OPTIONAL
-	WSDATA CONSULTOR		AS STRING OPTIONAL
-	WSDATA LATITUDE			AS FLOAT OPTIONAL
-	WSDATA LONGITUDE		AS FLOAT OPTIONAL
+    WSDATA QUICKSEARCH 		AS STRING OPTIONAL
+    WSDATA PAGE 			AS INTEGER OPTIONAL
+    WSDATA LIMIT 			AS INTEGER OPTIONAL
+    WSDATA ID				AS INTEGER OPTIONAL
 
-	WSMETHOD GET  		CLIENTE_V1	    DESCRIPTION "" 	PATH "cliente/v1" PRODUCES APPLICATION_JSON
-	WSMETHOD GET  		IDCLIENTE_V1	DESCRIPTION "" 	PATH "cliente/v1/{ID}" PRODUCES APPLICATION_JSON
-	WSMETHOD POST  		CLIENTE_V1		DESCRIPTION "" 	PATH "cliente/v1" PRODUCES APPLICATION_JSON
-	WSMETHOD PUT  		CLIENTE_V1		DESCRIPTION "" 	PATH "cliente/v1" PRODUCES APPLICATION_JSON
-    WSMETHOD DELETE  	CLIENTE_V1		DESCRIPTION "" 	PATH "cliente/v1" PRODUCES APPLICATION_JSON
+    WSMETHOD GET  		CLIENTE_V1	    DESCRIPTION "" 	PATH "cliente/v1" WSSYNTAX "/cliente/v1" PRODUCES APPLICATION_JSON
+    WSMETHOD GET  		IDCLIENTE_V1	DESCRIPTION "" 	PATH "cliente/v1/{ID}"  WSSYNTAX "/cliente/v1/{ID}" PRODUCES APPLICATION_JSON
+    WSMETHOD POST  		CLIENTE_V1		DESCRIPTION "" 	PATH "cliente/v1"  WSSYNTAX "/cliente/v1" PRODUCES APPLICATION_JSON
+    WSMETHOD PUT  		CLIENTE_V1		DESCRIPTION "" 	PATH "cliente/v1"  WSSYNTAX "/cliente/v1" PRODUCES APPLICATION_JSON
+    WSMETHOD DELETE  	CLIENTE_V1		DESCRIPTION "" 	PATH "cliente/v1"  WSSYNTAX "/cliente/v1" PRODUCES APPLICATION_JSON
 
 END WSRESTFUL
 
@@ -42,38 +34,70 @@ END WSRESTFUL
 
 WSMETHOD GET CLIENTE_V1 WSSERVICE CLIENTE
     Local nCount
-    Local nINc  :=   0 
+    Local nINc  :=   0
 
     self:SetContentType("application/json")
-	self:SetHeader('Access-Control-Allow-Credentials' , "true")
-    
+    self:SetHeader('Access-Control-Allow-Credentials' , "true")
 
-        
-    Beginsql alias "TRB"
-        SELECT A1_COD, A1_LOJA, A1_NOME FROM %table:SA1% 
-        WHERE 
-        A1_FILIAL = %xFilial:SA1%
+
+    nLimPorPag  :=   10
+    cOffSet	:=	"% "
+    //Conta o total de registros para fazer paginação
+    Beginsql alias "TRBCOUNT"
+        SELECT count(1) TOTALREG
+        FROM %table:SA1% 
+        WHERE A1_FILIAL = %xFilial:SA1%
         and %notdel%
-       
     EndSql
-    Count to nCount 
-    
+
+    If self:PAGE == 0
+        nPageAtu	:=	1
+    Else
+        nPageAtu	:=	self:PAGE
+    EndIf
+
+    nAverage	:=	TRBCOUNT->TOTALREG/nLimPorPag
+    nOffSet  :=	(nPageAtu-1) * nLimPorPag
+
+    cOffSet	+=	" OFFSET "+cValTochar(nOffSet)
+    cOffSet	+=	" ROWS FETCH NEXT "+cValToChar(nLimPorPag)+" ROWS ONLY "
+    nQtdNex	:=	TRBCOUNT->TOTALREG-nOffSet
+
+    cOffSet	+=	" %"
+    TRBCOUNT->(dbCloseArea())
+
+    Beginsql alias "TRB"
+        SELECT  A1_COD, A1_LOJA, A1_NOME FROM %table:SA1% 
+        WHERE A1_FILIAL = %xFilial:SA1%
+        and %notdel%
+        ORDER BY  A1_COD, A1_LOJA
+        %exp:cOffSet%
+    EndSql
+    Count to nCount
+
     TRB->(dbGoTop())
 
+    ::SetResponse('{ "items": ')
     ::SetResponse("[")
     While TRB->(!Eof())
         nINc++
+        nQtdNex--
+
         ::SetResponse(' {  "A1_COD":"'+TRB->A1_COD+'"   ,')
         ::SetResponse('    "A1_LOJA":"'+TRB->A1_LOJA+'"  ,')
         ::SetResponse('    "A1_NOME":"'+TRB->A1_NOME+'"   ')
+        ::SetResponse(' } ')
         If nINc < nCount
             ::SetResponse(",")
         EndIf
-        ::SetResponse(' } ')
+
 
         TRB->(dbSkip())
     EndDo
-    ::SetResponse("]")
+   
+    ::SetResponse("],")
+     ::SetResponse(' "disablenext":"'+ If(nQtdNex>0, 'false','true') +'"')
+     ::SetResponse("}")
 
     TRB->(dbCloseArea())
 
@@ -83,11 +107,11 @@ Return .T.
 WSMETHOD GET IDCLIENTE_V1 WSSERVICE CLIENTE
     Local lRet := .F.
     //Local oJSon	 	:= JsonObject():New()
-    Begin Sequence 
+    Begin Sequence
 
 
         lRet    := .F.
-    End Sequence        
+    End Sequence
 
 
 Return lRet
@@ -96,11 +120,11 @@ Return lRet
 WSMETHOD POST CLIENTE_V1 WSSERVICE CLIENTE
     Local lRet := .F.
 
-    Begin Sequence 
+    Begin Sequence
 
 
         lRet    := .F.
-    End Sequence        
+    End Sequence
 
 
 Return lRet
@@ -108,11 +132,11 @@ Return lRet
 WSMETHOD PUT CLIENTE_V1 WSSERVICE CLIENTE
     Local lRet := .F.
 
-    Begin Sequence 
+    Begin Sequence
 
 
         lRet    := .F.
-    End Sequence        
+    End Sequence
 
 
 Return lRet
@@ -121,11 +145,11 @@ Return lRet
 WSMETHOD DELETE CLIENTE_V1 WSSERVICE CLIENTE
     Local lRet := .F.
 
-    Begin Sequence 
+    Begin Sequence
 
 
         lRet    := .F.
-    End Sequence        
+    End Sequence
 
 
 Return lRet

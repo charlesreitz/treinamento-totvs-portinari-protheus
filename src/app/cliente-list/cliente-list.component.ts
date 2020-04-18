@@ -26,21 +26,40 @@ export class ClienteListComponent implements OnInit {
 
   public readonly columns: Array<PoTableColumn> = [
     { property: 'A1_COD', width: '10%', label: 'Código' },
-    { property: 'A1_LOJA', width: '30%', label: 'Loja' },
-    { property: 'A1_NOME', width: '20%', label: 'Nome' }
+    { property: 'A1_LOJA', width: '40%', label: 'Loja' },
+    { property: 'A1_NOME', width: '40%', label: 'Nome' }
   ]
 
   constructor(private clienteListService: ClienteListService) { }
 
   ngOnInit() {
+    // Para carregar ao entrar na tela
     this.getItems();
   }
 
-  getItems() {
-    this.clienteListService.getItems().pipe(take(1)).subscribe(
-      (data: Array<object>) => {
-          this.items = data;
-          this.disableNext = data['disablenext'];
-      });
+  //async 
+  async getItems(lShowMore?) {
+
+    if (lShowMore){
+      this.page++
+    } else {
+      this.items = []
+    }
+
+    // # Forma 1 #
+    //   this.clienteListService.getItems().pipe(take(1)).subscribe(
+    //     (data: Array<object>) => {
+    //         this.items = data;
+    //         this.disableNext = data['disablenext'];
+    //     });
+    // }
+
+    // # Forma 2 #
+    const retorno = await this.clienteListService.getItems(this.page).toPromise();
+    // this.items = retorno['items'];
+    this.items.push(... retorno['items']);
+    this.disableNext = retorno['disablenext'];
+    
   }
+
 }
