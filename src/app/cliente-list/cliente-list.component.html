@@ -1,6 +1,8 @@
-<po-page-default p-title="Clientes">
+<po-page-default p-title="Clientes" [p-actions]="actions" [p-breadcrumb]="breadcrumb">
 
     <po-table p-hide-text-overflow p-sort="true" [p-show-more-disabled]="disableNext" p-container p-sort 
-        p-striped [p-columns]="columns" [p-items]="items" (p-show-more)="getItems(true)" >
+        p-striped [p-columns]="columns" [p-items]="items" (p-show-more)="getItems(true)" 
+        
+        >
     </po-table>
 </po-page-default>

@@ -19,6 +19,8 @@ import { Observable, BehaviorSubject, Subject, ObservableInput, throwError } fro
 import { of } from '../../node_modules/rxjs';
 import { ClienteListComponent } from './cliente-list/cliente-list.component';
 import { ClienteEditComponent } from './cliente-edit/cliente-edit.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -34,16 +36,20 @@ import { ClienteEditComponent } from './cliente-edit/cliente-edit.component';
     PoModule,
     RouterModule.forRoot([]),
     PoTemplatesModule,
-    Interceptor
+    Interceptor,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule
   ],
   providers: [
+    CookieService,
     { provide: LOCALE_ID, useValue: 'pt' },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
-    CookieService,
     {
       provide: APP_INITIALIZER, useFactory: load, multi: true, deps: [
         HttpClient,
         ConfigService
+        
       ],
     },
     LoginComponent,

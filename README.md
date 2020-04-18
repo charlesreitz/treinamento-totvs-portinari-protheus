@@ -33,7 +33,7 @@ Ao final do treinamento aluno estará capacitada para montar um portal web com a
 5. Sobre Licenças "Software Livre" (https://www.youtube.com/watch?v=FVy1fZhNSDA)
 
 
-## Mãos na massa!
+## Hands-on! (Mãos na massa!)
 1. Extensões para o VS CODE 
 
 * https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-close-tag
@@ -119,8 +119,10 @@ Ao final do treinamento aluno estará capacitada para montar um portal web com a
 
 9. Criação dos serviços de login e chamadas das rotinas de autenticação
 
-10. Criação do intercept (interceptor.module.ts)
- ``` ng g m teste ```
+10. Criação do modulo intercept  (interceptor.module.ts)
+ ``` ng g m interceptor ```
+
+* TIP: https://po-ui.io/documentation/po-http-interceptor
 
 11. Criação do CANACTIVE para bloquear acessos a paginas
 
@@ -129,25 +131,168 @@ Ao final do treinamento aluno estará capacitada para montar um portal web com a
 
 13. Criação do CRUD com ReactiveForm
 
-14. Ler um JSON na produção para configurar o local da API (config.json) (config.service.ts)
+* https://medium.com/totvsdevelopers/criando-um-crud-com-thf-iniciando-o-projeto-2bb79138eea6
 
 15. registerLocaleData ptbr
 
-16. NG BUILD
+16. Fazer build do projeto e subir para base de produção. NG BUILD 
 
-17. Configurando HTTPS e HTTP Serviço Protheus ´
+17. Configurando HTTPS e HTTP Serviço Protheus 
+* Redirecionamento de portas NAT
+* DMZ x Infraestrutura X Segurança
+* TLS 1.2
+* Demora em rotinas padrões, exemplo pedido de venda, colocar em um JOB para fazer o processamento ao invés de incluir direto. 
+* Deixar rápido para o usuário da ponta, não fazer ele esperar
+* Problema no Safari (envia a requisição 2 vezes - ISSUE aberta na TOTVS)
 
-18. Criando os serviços Rest no Prothues 
+```
+[environment]
+SourcePath=C:\TOTVS 12\Microsiga\Protheus\apo\resttemp
+RootPath=C:\TOTVS 12\Microsiga\Protheus_Data
+StartPath=\sigapci\
+x2_path=
+RpoDb=Top
+RpoLanguage=portuguese
+RpoVersion=120
+LocalFiles=CTREE
+Trace=0
+localdbextension=.dtc
+PictFormat=DEFAULT
+DateFormat=DEFAULT
+TopDatabase=MSSQL
+TopServer=192.168.1.205
+TopAlias=PCIODBC
+RegionalLanguage=BRA
+helpserver=192.168.1.204:89
+TopMemoMega=10
+FWTRACELOG=0
+FORMPATH=C:\TOTVS 12\Microsiga\Protheus\apo\apo_rh_formulas
+SpecialKey=prd
+
+[Drivers]
+Active=TCP
+
+[TCP]
+TYPE=TCPIP
+Port=10092
+
+[General]
+InstallPath=C:\TOTVS 12\Microsiga\Protheus
+Consolelog=1
+MAXSTRINGSIZE=10
+BuildKillUsers=1
+LogTimeStamp=1
+AsyncMaxFiles=15
+ConsoleMaxSize=10485760
+
+[LICENSECLIENT]
+enable=1
+server=192.168.1.204
+port=5551
+
+[Service]
+Name=TOTVSAPPSERVER12RESTHTTP
+Displayname=.TOTVS | Appserver - Rest HTTP 
+
+
+;##########################################33
+;configuracao do http e https
+;##########################################33
+[HTTP]
+ENABLE=0
+PORT=56649
+PATH=C:\TOTVS 12\Microsiga\protheus_data\web\cliente_tmp
+UPLOADPATH=\web\cliente
+HSTSEnable=1
+HSTSIncludeSubDomains=1
+HSTSMaxAge=31536000
+;Compression=1
+;ENABLEHTTPPROT=1
+;TIMEMSHTTPPROT=100
+;XFrameOptions=SAME
+;EnableCors=1
+;AllowOrigin=*
+DEFAULTPAGE=index.html
+;Cache-control=no-store
+;Pragma=no-cache
+;LogResponse=1
+;LogRequest=1
+;LogTimeStamp=1
+
+[HTTPS]
+ENABLE=1
+PORT=56649
+SecureCookie=1
+
+[SSLConfigure]
+SECURITY=1
+;disableCipher=RC4:CBC
+VERBOSE=0
+Debug=0
+SSL1=1
+SSL2=1
+SSL3=1
+State=1
+TLS1_0=1
+TLS1_1=1
+TLS1_2=1
+HSM=0
+Bugs=1
+CertificateServer   =C:\TOTVS 12\Microsiga\Protheus\bin\appserverHTTPRest\certificado\server.crt
+KeyServer           =C:\TOTVS 12\Microsiga\Protheus\bin\appserverHTTPRest\certificado\server.key
+PassPhrase          =123
+;https://tdn.totvs.com/display/tec/DisableCipher
+
+;##########################################33
+;configuracao do rest
+;##########################################33
+[HTTPV11]
+Enable=1
+Sockets=HTTPREST
+
+[HTTPREST]
+Port=56650
+URIs=HTTPURI
+SECURITY=1
+VERBOSE=0
+;SSL2=1
+SSL3=1
+TLS1=3
+Bugs=1
+State=1
+
+
+[HTTPURI]
+URL=/
+PrepareIn=A1,01
+Instances=2,2
+CORSEnable=1
+AllowOrigin=https://cliente.actvs.com.br:56649
+Public=PCIClienteAuth,PCIClienteOrdemServico,PCIClienteUsers,PCIClienteDashBoard,PCIClienteTitulos,PCIClienteProjetos,PCIClienteContratos
+
+[HTTPJOB]
+MAIN=HTTP_START
+ENVIRONMENT=environment
+
+;##########################
+;CONFIGURACAO DE JOBS
+;##########################
+[ONSTART]
+jobs=HTTPJOB
+RefreshRate=10
+DebugMsg=0
+
+
+```
 
 19. Guia de Boas Práticas para  REST
 * https://tdn.totvs.com/display/public/INT/Guia+de+implementacao+das+APIs+TOTVS
 * https://api.totvs.com.br/guia
 
+20. Tag tenantId  para buscar dados de filiais - https://tdn.totvs.com/display/framework/02.+REST+com+ERP+Microsiga+Protheus
 
-20. Segurança
-* JWT
-* SSL
-* Tratar acesso com MENUDEF +    no Protheus
+
+
 ## Aprendizado contínuo
 1. Automatização de teste
 2. Docker 
@@ -155,4 +300,8 @@ Ao final do treinamento aluno estará capacitada para montar um portal web com a
 4. Internacionalização 
 5. Lazy Load no Angular
 
+## Se der tempo
 * Bonus - GIT (code.engpro.com.br) NG SERVENG BUILDComo publicar o projeto * Atualização do PO? * package.json
+* Ler um JSON na produção para configurar o local da API (config.json) (config.service.ts)
+* Adicionar a lista de contatos quando estiver alterando e incluindo um cliente
+* Tratar acesso com MENUDEF +    no Protheus
