@@ -132,6 +132,7 @@ Ao final do treinamento aluno estará capacitada para montar um portal web com a
 13. Criação do CRUD com ReactiveForm
 
 * https://medium.com/totvsdevelopers/criando-um-crud-com-thf-iniciando-o-projeto-2bb79138eea6
+- Criação de pai e filho
 
 15. registerLocaleData ptbr
 
