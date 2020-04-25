@@ -2,10 +2,9 @@ import { Router } from '@angular/router';
 import { ClienteListService } from './cliente-list.service';
 import { Component, OnInit } from '@angular/core';
 import {
-  PoModalAction, PoDisclaimer, PoMultiselectOption, PoInfoOrientation,
-  PoDialogService, PoModalComponent, PoTableAction, PoTableColumn,
-  PoTableComponent, PoNotificationService, PoToasterOrientation,
-  PoPageAction, PoPageFilter, PoButtonComponent, PoBreadcrumb, PoDynamicFormField
+  PoDialogService, PoTableColumn,
+  PoTableComponent, PoNotificationService,
+  PoPageAction, PoBreadcrumb
 } from '@portinari/portinari-ui';
 import { take } from 'rxjs/operators';
 
@@ -18,9 +17,9 @@ export class ClienteListComponent implements OnInit {
   public items = [];
   public page = 1;
   public disableNext = false;
-  
+
   public readonly actions: Array<PoPageAction> = [
-    { label: 'Novo', action: () => { this.router.navigate(['/client-edit']) } , icon: 'po-icon-plus' },
+    { label: 'Novo', action: () => { this.router.navigate(['/client-edit']) }, icon: 'po-icon-plus' },
 
   ];
   public readonly breadcrumb: PoBreadcrumb = {
@@ -66,14 +65,14 @@ export class ClienteListComponent implements OnInit {
     private poDialog: PoDialogService,
     public router: Router,
     private poNotification: PoNotificationService,
-    ) { }
+  ) { }
 
   ngOnInit() {
     // Para carregar ao entrar na tela
     this.getItems();
   }
 
-  //async 
+
   async getItems(lShowMore?) {
 
     if (lShowMore) {
@@ -82,17 +81,9 @@ export class ClienteListComponent implements OnInit {
       this.items = []
     }
 
-    // # Forma 1 #
-    //   this.clienteListService.getItems().pipe(take(1)).subscribe(
-    //     (data: Array<object>) => {
-    //         this.items = data;
-    //         this.disableNext = data['disablenext'];
-    //     });
-    // }
+    const retorno = await this.clienteListService
+      .get(this.page).toPromise();
 
-    // # Forma 2 #
-    const retorno = await this.clienteListService.get(this.page).toPromise();
-    // this.items = retorno['items'];
     this.items.push(...retorno['items']);
     this.disableNext = retorno['disablenext'];
 
@@ -113,8 +104,8 @@ export class ClienteListComponent implements OnInit {
 
         // Remove da linha sem precisa consultar novamente o servidor, 
         // ou poderia ter chamado a funcao 'this.getItems()' para atualizar nossa tabela
-        this.items.forEach( (item, index) => {
-          if (linhaTabela.A1_COD+linhaTabela.A1_LOJA === item.A1_COD+item.A1_LOJA) {
+        this.items.forEach((item, index) => {
+          if (linhaTabela.A1_COD + linhaTabela.A1_LOJA === item.A1_COD + item.A1_LOJA) {
             this.items.splice(index, 1);
           }
         });

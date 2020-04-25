@@ -3,16 +3,16 @@ import { Router } from '@angular/router';
 import { LoginService } from './../login/login.service';
 import { CookieService } from 'ngx-cookie-service';
 import { Injectable, NgModule, } from '@angular/core';
-import { Observable, BehaviorSubject, Subject, throwError } from 'rxjs';
-import { switchMap, map, filter, catchError, take,  finalize, mergeMap } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { switchMap, catchError, take, finalize, mergeMap } from 'rxjs/operators';
 import {
-    HttpRequest, HttpHandler, HttpEvent, HttpSentEvent,
+    HttpRequest, HttpHandler, HttpSentEvent,
     HttpHeaderResponse,
     HttpProgressEvent,
     HttpResponse,
     HttpErrorResponse,
     HttpUserEvent,
-    HttpInterceptor, HttpHeaders
+    HttpInterceptor
 } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PoNotificationService } from '@portinari/portinari-ui';
@@ -24,7 +24,8 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
         private loginService: LoginService,
         private configService: ConfigService,
         private router: Router,
-        private cookieService: CookieService) {
+        private cookieService: CookieService
+    ) {
     }
     private isRefreshingToken = false;
     //private tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
@@ -35,27 +36,23 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
     ): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any> | any> {
         //console.log(request)
         // Adiciona o HOST na URL para utilizar um arquivo config.json quando fazer o build do projeto
-        request = request.clone({url: `${this.configService.getHostRest()}/${request.url}` });
+        request = request.clone({ url: `${this.configService.getHostRest()}/${request.url}` });
         //console.log(request.url)
 
         let dataAtual = new Date()
-        let dataExpire = new Date(this.cookieService.get('expires_date'))
-        //console.log(request.url.includes('/assets/config.json'))
-        // Caso venceu o token faz o refresh
-        if (!request.url.includes('/assets/config.json') && !this.isRefreshingToken && dataAtual >= dataExpire && this.cookieService.get('access_token')) {
+        let dataExpire = new Date(sessionStorage.getItem('expires_date'))
 
+        // Caso venceu o token faz o refresh
+        if (!request.url.includes('/assets/config.json') && !this.isRefreshingToken && dataAtual >= dataExpire && sessionStorage.getItem('access_token')) {
+        
             this.isRefreshingToken = true;
 
-            return this.loginService.refresh(this.cookieService.get('refreshtoken'))
-                .pipe( take(1),
+            return this.loginService.refresh(sessionStorage.getItem('refreshtoken'))
+                .pipe(take(1),
                     switchMap((data) => {
                         if (data) {
-                            //this.tokenSubject.next(data['access_token']);
-                            this.cookieService.set('access_token', data['access_token'], undefined, '/');
+                            sessionStorage.setItem('access_token', data['access_token'])
                             this.loginService.setNextDataRefreshToken(data['expires_in'])
-                            //return next.handle(this.addTokenToRequest(request, data['access_token']));
-                            //return next.handle(this.addTokenToRequest(request));
-                            //this.refreshTokenSubject.next(authResponse.refreshToken);
                             return next.handle(this.addTokenToRequest(request));
                         }
                         return throwError(data);
@@ -67,11 +64,11 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
                         this.isRefreshingToken = false;
                     })
                 );
-    
+
         }
 
         // Adiciona o Token nas requisições
-        if (!this.isRefreshingToken && this.cookieService.get('access_token')) {
+        if (!this.isRefreshingToken && sessionStorage.getItem('access_token')) {
             request = this.addTokenToRequest(request)
         }
 
@@ -121,7 +118,7 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
         const headers = {
             'Accept': 'application/json; charset=UTF-8', // Quando enviado isso, o Protheus entende que deve converter para UTF8
             'Content-Type': 'application/json', // Solicita que a comunicação seja no formato JSON
-            'Authorization': 'Bearer ' + this.cookieService.get('access_token'), // Envia o TOKEN de autenticação
+            'Authorization': 'Bearer ' + sessionStorage.getItem('access_token'), // Envia o TOKEN de autenticação
             'X-Portinari-No-Count-Pending-Requests': 'false' // Não realiza a contagem 
         };
         //console.log(this.configService.getHostRest())
@@ -132,8 +129,6 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
 
 
 }
-
-
 
 @NgModule({
     providers: [

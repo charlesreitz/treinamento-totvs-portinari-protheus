@@ -8,16 +8,24 @@ import { ClienteListComponent } from './cliente-list/cliente-list.component';
 
 const routes: Routes = [
 
-  { path: 'home', component: HomeComponent,  canActivate: [LoginComponent] } ,
-  { path: 'login', component: LoginComponent } ,
-  { path: 'client-list', component: ClienteListComponent ,  canActivate: [LoginComponent]} ,
-  { path: 'client-edit', component: ClienteEditComponent ,  canActivate: [LoginComponent]} ,
-  { path: 'client-edit/:A1_COD/:A1_LOJA', component: ClienteEditComponent ,  canActivate: [LoginComponent]} ,
-  { path: '',  redirectTo: 'home',  pathMatch: 'full',  canActivate: [LoginComponent] }
+  { path: 'home', component: HomeComponent, canActivate: [LoginComponent] },
+  { path: 'login', component: LoginComponent },
+  {
+    path: 'client-list', component: ClienteListComponent,
+    canActivate: [LoginComponent]
+  },
+  {
+    path: 'client-edit', 
+    component: ClienteEditComponent,
+    canActivate: [LoginComponent]
+  },
+  { path: 'client-edit/:A1_COD/:A1_LOJA', component: ClienteEditComponent, canActivate: [LoginComponent] },
+  { path: '**', redirectTo: 'home', pathMatch: 'full'}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes,{ useHash: true })],
+  //imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

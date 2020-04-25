@@ -32,7 +32,7 @@ END WSRESTFUL
 //QUERYPARAM
 //PATHPARAM 
 
-WSMETHOD GET CLIENTE_V1 WSSERVICE CLIENTE
+WSMETHOD GET CLIENTE_V1 QUERYPARAM PAGE WSSERVICE CLIENTE
     Local nCount
     Local nINc  :=   0
 
@@ -109,7 +109,7 @@ WSMETHOD GET CLIENTE_V1 WSSERVICE CLIENTE
 
 Return .T.
 
-WSMETHOD GET IDCLIENTE_V1 PATHPARAM A1_COD,A1_LOJA WSSERVICE CLIENTE
+WSMETHOD GET IDCLIENTE_V1 PATHPARAM A1_COD,A1_LOJA  WSSERVICE CLIENTE
     Local lRet := .F.
     //Local oJSon	 	:= JsonObject():New()
     ::SetContentType("application/json")
@@ -120,7 +120,7 @@ WSMETHOD GET IDCLIENTE_V1 PATHPARAM A1_COD,A1_LOJA WSSERVICE CLIENTE
 
         SA1->(dbSetOrder(1))
         If !SA1->(dbseek(FWxFilial("SA1")+ Padr(::A1_COD,GetSX3Cache("A1_COD","X3_TAMANHO"))+Padr(::A1_LOJA,GetSX3Cache("A1_LOJA","X3_TAMANHO")) ))
-            SetRestFault(400,"Cliente não localizado com código e loja informado",.T.,400,/*cDetailMsg*/,/*cHelpUrl*/,/*aDetails*/)
+            SetRestFault(400,"Cliente nï¿½o localizado com cï¿½digo e loja informado",.T.,400,/*cDetailMsg*/,/*cHelpUrl*/,/*aDetails*/)
             Break
         EndIf
 
@@ -130,9 +130,38 @@ WSMETHOD GET IDCLIENTE_V1 PATHPARAM A1_COD,A1_LOJA WSSERVICE CLIENTE
         ::SetResponse(' "A1_NOME":"'+Alltrim(SA1->A1_NOME)+'"   ,')
         ::SetResponse(' "A1_NREDUZ":"'+Alltrim(SA1->A1_NREDUZ)+'"   ,')
         ::SetResponse(' "A1_MSBLQL":"'+Alltrim(SA1->A1_MSBLQL)+'"   ,')
-        ::SetResponse(' "A1_CGC":"'+SA1->A1_CGC+'"   ')
-        ::SetResponse(' } ')
+        ::SetResponse(' "A1_CGC":"'+SA1->A1_CGC+'"   ,')
 
+        ::SetResponse(' "ITEMS":[')
+        Beginsql alias "TRB"
+            SELECT ZZK_SEQ, ZZK_NOME, ZZK_OBS, ZZK_MSBLQL
+            FROM %table:ZZK% 
+            WHERE D_E_L_E_T_ = ''
+            AND ZZK_CLIENT  = %exp:SA1->A1_COD%
+            AND ZZK_LOJA = %exp:SA1->A1_LOJA%
+        EndSql
+        nCount := 0
+        nInc := 0
+        Count to nCount
+        TRB->(dbGoTop())
+        While TRB->(!Eof())
+            nInc++
+            ::SetResponse('{')
+            ::SetResponse('"ZZK_SEQ":"'+TRB->ZZK_SEQ+'", ')
+            ::SetResponse('"ZZK_NOME":"'+TRB->ZZK_NOME+'", ')
+            ::SetResponse('"ZZK_OBS":"'+TRB->ZZK_OBS+'", ')
+            ::SetResponse('"DELETADO":"N", ')           
+            ::SetResponse('"ZZK_MSBLQL":"'+TRB->ZZK_MSBLQL+'" ')
+            ::SetResponse('}')
+            If nInc < nCount
+                ::SetResponse(',')
+            EndIf       
+            TRB->(dbSkip())
+        EndDo
+
+        ::SetResponse(']')
+        TRB->(dbclosearea())
+        ::SetResponse(' } ')
         lRet    := .T.
     End Sequence
 
@@ -152,7 +181,7 @@ WSMETHOD POST CLIENTE_V1 WSSERVICE CLIENTE
 
         SA1->(dbSetOrder(1))
         If SA1->(dbseek(FWxFilial("SA1")+ Padr(oJSon['A1_COD'],GetSX3Cache("A1_COD","X3_TAMANHO"))+Padr(oJSon['A1_LOJA'] ,GetSX3Cache("A1_LOJA","X3_TAMANHO")) ))
-            SetRestFault(400,"Cliente já cadastrado com código e loja informado",.T.,400,/*cDetailMsg*/,/*cHelpUrl*/,/*aDetails*/)
+            SetRestFault(400,"Cliente jï¿½ cadastrado com cï¿½digo e loja informado",.T.,400,/*cDetailMsg*/,/*cHelpUrl*/,/*aDetails*/)
             Break
         EndIf
 
@@ -163,15 +192,15 @@ WSMETHOD POST CLIENTE_V1 WSSERVICE CLIENTE
         SA1->A1_NREDUZ  := oJSon['A1_NREDUZ']
         SA1->A1_CGC     := oJSon['A1_CGC']
         SA1->A1_MSBLQL  := oJSon['A1_MSBLQL']
-        
+
         SA1->(msUnlock())
 
         ::SetResponse("{")
         ::SetResponse('"_messages": [{')
         ::SetResponse('"type":"success", ')
         ::SetResponse('"code":200, ')
-        ::SetResponse('"message":"Cliente Incluído com Sucesso", ')
-        ::SetResponse('"detailedMessage":"O cliente com o código '+SA1->A1_COD+' loja '+SA1->A1_LOJA+' foi incluído com sucesso " ')
+        ::SetResponse('"message":"Cliente Incluï¿½do com Sucesso", ')
+        ::SetResponse('"detailedMessage":"O cliente com o cï¿½digo '+SA1->A1_COD+' loja '+SA1->A1_LOJA+' foi incluï¿½do com sucesso " ')
         ::SetResponse("}]")
         ::SetResponse('}')
 
@@ -183,7 +212,7 @@ WSMETHOD POST CLIENTE_V1 WSSERVICE CLIENTE
 Return lRet
 
 WSMETHOD PUT CLIENTE_V1 WSSERVICE CLIENTE
-    Local lRet := .F.
+    Local lRet := .F., nI
     Local oJSon	 	:= JsonObject():New()
 
     ::SetContentType("application/json")
@@ -194,7 +223,7 @@ WSMETHOD PUT CLIENTE_V1 WSSERVICE CLIENTE
 
         SA1->(dbSetOrder(1))
         If !SA1->(dbseek(FWxFilial("SA1")+ Padr(oJSon['A1_COD'],GetSX3Cache("A1_COD","X3_TAMANHO"))+Padr(oJSon['A1_LOJA'] ,GetSX3Cache("A1_LOJA","X3_TAMANHO")) ))
-            SetRestFault(400,"Cliente não localizado com código e loja informado",.T.,400,/*cDetailMsg*/,/*cHelpUrl*/,/*aDetails*/)
+            SetRestFault(400,"Cliente nï¿½o localizado com cï¿½digo e loja informado",.T.,400,/*cDetailMsg*/,/*cHelpUrl*/,/*aDetails*/)
             Break
         EndIf
 
@@ -207,13 +236,24 @@ WSMETHOD PUT CLIENTE_V1 WSSERVICE CLIENTE
         SA1->A1_MSBLQL  := oJSon['A1_MSBLQL']
         SA1->(msUnlock())
 
+        For nI := 1 To Len(oJSon['ITEMS'] )
+            ZZK->(Reclock("ZZK",.T.))
+            ZZK->ZZK_FILIAL = FWxFilial("ZZK")
+            ZZK->ZZK_CLIENT = oJSon['A1_COD']
+            ZZK->ZZK_LOJA   = oJSon['A1_LOJA']
+            ZZK->ZZK_SEQ    = oJSon['ITEMS'][nI]['ZZK_SEQ']
+            ZZK->ZZK_NOME   = oJSon['ITEMS'][nI]['ZZK_NOME']
+            ZZK->ZZK_OBS     = oJSon['ITEMS'][nI]['ZZK_OBS']
+            ZZK->ZZK_MSBLQL = oJSon['ITEMS'][nI]['ZZK_MSBLQL']
+            ZZK->(msUnlock())
+        Next
 
         ::SetResponse("{")
         ::SetResponse('"_messages": [{')
         ::SetResponse('"type":"success", ')
         ::SetResponse('"code":200, ')
         ::SetResponse('"message":"Cliente Alterado com Sucesso", ')
-        ::SetResponse('"detailedMessage":"O cliente com o código '+SA1->A1_COD+' loja '+SA1->A1_LOJA+' foi alterado com sucesso " ')
+        ::SetResponse('"detailedMessage":"O cliente com o cï¿½digo '+SA1->A1_COD+' loja '+SA1->A1_LOJA+' foi alterado com sucesso " ')
         ::SetResponse("}]")
         ::SetResponse('}')
 
@@ -234,7 +274,7 @@ WSMETHOD DELETE CLIENTE_V1 PATHPARAM A1_COD, A1_LOJA WSSERVICE CLIENTE
             SA1->(dbDelete())
             SA1->(msUnlock())
         Else
-            SetRestFault(400,"Código não localizado para realizar exclusão",.T.,400,/*cDetailMsg*/,/*cHelpUrl*/,/*aDetails*/)
+            SetRestFault(400,"Cï¿½digo nï¿½o localizado para realizar exclusï¿½o",.T.,400,/*cDetailMsg*/,/*cHelpUrl*/,/*aDetails*/)
             Break
         EndIf
 

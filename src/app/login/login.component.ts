@@ -1,14 +1,10 @@
-import { CookieService } from 'ngx-cookie-service';
+import { LoginService } from './../login/login.service';
 import { Component, OnInit } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { LoginService } from './login.service';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 import {
-  PoPageLogin, PoPageLoginRecovery, PoModalPasswordRecoveryType, PoModalPasswordRecovery,
-  PoModalPasswordRecoveryComponent
+  PoPageLogin
 } from '@portinari/portinari-templates';
-import { PoNotificationService, PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'app-login',
@@ -18,9 +14,8 @@ import { PoNotificationService, PoModalAction, PoModalComponent } from '@portina
 export class LoginComponent implements OnInit {
 
   constructor(public router: Router,
-    private cookieService: CookieService,
-    private loginService: LoginService,
-    private thfNotification: PoNotificationService) { }
+              private loginService: LoginService,
+    ) { }
 
   ngOnInit() {
   }
@@ -37,18 +32,19 @@ export class LoginComponent implements OnInit {
     return true;
   }
 
-  public loginSubmit(formData: PoPageLogin) {
+   async loginSubmit(formData: PoPageLogin) {
     let login = formData.login
     let password = formData.password
 
-    this.loginService.login(login, password).pipe(take(1)).subscribe(
-      (data: Array<object>) => {
-        this.loginService.setNextDataRefreshToken(data['expires_in'])
-        this.cookieService.set('refreshtoken', data['refresh_token'], undefined, '/');
-        this.cookieService.set('access_token', data['access_token'], undefined, '/');
+    const retorno =  await this.loginService.login(login, password).toPromise()
+    console.log(retorno)
+    if (retorno){
+      sessionStorage.setItem('refreshtoken', retorno['refresh_token']);
+      sessionStorage.setItem('access_token', retorno['access_token']);
+      this.loginService.setNextDataRefreshToken(retorno['expires_in']) 
+      this.router.navigate(['/home']);
+    }
 
-        this.router.navigate(['/home']);
-      });
   }
 
 

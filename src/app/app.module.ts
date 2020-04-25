@@ -29,6 +29,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HomeComponent,
     ClienteListComponent,
     ClienteEditComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -44,7 +45,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   providers: [
     CookieService,
     { provide: LOCALE_ID, useValue: 'pt' },
-    { provide: LocationStrategy, useClass: HashLocationStrategy },
+    // { provide: LocationStrategy, useClass: HashLocationStrategy },
     {
       provide: APP_INITIALIZER, useFactory: load, multi: true, deps: [
         HttpClient,
