@@ -26,7 +26,7 @@ Ao final do treinamento aluno estará capacitada para montar um portal web com a
 
 
 ## Sobre Portinari (Antigo THF)
-1. Primeiro projeto da TOTVS OPENS SOURCE
+1. Primeiro projeto da TOTVS OPEN SOURCE
 2. Qualquer um pode ajudar 
 3. Qualquer um pode divulgar 
 4. Qualquer um pode dar treinamento
