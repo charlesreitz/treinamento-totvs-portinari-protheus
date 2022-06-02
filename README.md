@@ -128,6 +128,7 @@ Ao final do treinamento aluno estará capacitada para montar um portal web com a
 
 12. ngx-cookie-service para salvar os dados nos cookies (https://www.npmjs.com/package/ngx-cookie-service)
 ``` npm install --save ngx-cookie-service ``` 
+  - Atualizado: Não usamos mais esse serviço pois utilizamos o localstorage
 
 13. Criação do CRUD com ReactiveForm
 
