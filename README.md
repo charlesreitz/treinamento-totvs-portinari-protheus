@@ -1,18 +1,21 @@
 # Treinamento TOTVS Portinari com ERP TOTVS Microsiga Protheus
-Ao final do treinamento aluno estará capacitada para montar um portal web com autenticação integrada com o ERP TOTVS Microsiga Protheus. Criando formulários de inclusão, alteração, exclusão e listagem de dados. 
+Ao final do treinamento aluno estará capacitado para montar um portal web com autenticação integrada com o ERP TOTVS Microsiga Protheus. Criando formulários de inclusão, alteração, exclusão e listagem de dados. 
 
 
 ## Pré-requisitos
 * Conhecimento em HTML
-* JavaScriptType Script 
+* Conhecimento CSS
+* Conhecimento JavaScript
+* Conhecimento Type Script 
 * Angular 8  (https://loiane.training/curso/angular  - Grátis) 
 * Protheus - WebService REST
 * GIT 
 * Fazer os primeiros passos do Portinari (https://portinari.io/guides/getting-started)
- * Possuir uma instalação do protheus funcionando na versão 12.1.25 ou superior
+ * Possuir uma instalação do protheus funcionando na versão 12.1.33 ou superior
  * Possui webservice rest protheus configurado  (https://tdn.totvs.com/pages/viewpage.action?pageId=75268866 ) 
  * NODE instalado na maquina  (https://nodejs.org/en/ ) 
  * NG CLI (https://cli.angular.io/)
+* Fazer o treinamento da Universidade TOTVS (https://universidadetotvs.com.br/skin/atena/training/trail/2091) - Opcional
 
 ## Escopo
 1. Portinari - Criado a tela de LOGIN 
