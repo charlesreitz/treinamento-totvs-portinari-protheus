@@ -101,34 +101,38 @@ HTTPS é de suma importância para segurança dos dados entre o CLIENT (navegado
 * https://marketplace.visualstudio.com/items?itemName=totvs.tds-vscode
 
 2. Seguir o passo a paso do https://portinari.io/guides/getting-started
-  a. npm i -g @angular/cli@8.0.0
+  a. npm i -g @angular/cli@14
   b. ng new my-po-project --skipInstall
     ```
     "dependencies": {
-        "@angular/animations": "~8.0.0",
-        "@angular/common": "~8.0.0",
-        "@angular/compiler": "~8.0.0",
-        "@angular/core": "~8.0.0",
-        "@angular/forms": "~8.0.0",
-        "@angular/platform-browser": "~8.0.0",
-        "@angular/platform-browser-dynamic": "~8.0.0",
-        "@angular/platform-server": "~8.0.0",
-        "@angular/router": "~8.0.0",
-        "rxjs": "~6.4.0",
-        "zone.js": "~0.9.1"
-        ...
+        "@angular/animations": "^14.2.0",
+        "@angular/common": "^14.2.0",
+        "@angular/compiler": "^14.2.0",
+        "@angular/core": "^14.2.0",
+        "@angular/forms": "^14.2.0",
+        "@angular/platform-browser": "^14.2.0",
+        "@angular/platform-browser-dynamic": "^14.2.0",
+        "@angular/router": "^14.2.0",
+        "@po-ui/ng-components": "^14.9.0",
+        "@po-ui/ng-templates": "^14.9.1",
+        "@totvs/po-theme": "^14.9.1",
+        "rxjs": "~7.5.0",
+        "tslib": "^2.3.0",
+        "zone.js": "~0.11.4"
     }
     ```
     c. ```npm install```
-    d. ```ng add @portinari/portinari-ui```
-    e. ```npm i --save @portinari/portinari-templates```
+    d. ```ng add @po-ui/portinari-ui```
+    e. ```npm i --save @po-ui/portinari-templates```
     f. E depois adicionar o PoTemplatesModule no módulo principal (app.module.ts) da sua aplicação 
     g. ```ng serve```
-    h. Utilizando o tema da TOTVS no portinari (https://thf.totvs.com.br/home) -> ```npm i --save @totvs/portinari-theme```
+    h. Utilizando o tema da TOTVS no portinari (https://github.com/totvs/po-theme-totvse) -> ```npm i @totvs/po-theme --save```
     i. em seguida, atualize o arquivo **angular.json** para utilizar o tema. 
         ```
         "styles": [
-        "node_modules/@totvs/portinari-theme/css/po-theme-default.min.css"
+        "node_modules/@totvs/po-theme/css/po-theme-default-variables.min.css",
+        "node_modules/@totvs/po-theme/css/po-theme-default.min.css",
+         "node_modules/@po-ui/style/css/po-theme-core.min.css",
         ]
         ```
         Tema do portinari: "./node_modules/@portinari/style/css/po-theme-default.min.css",
