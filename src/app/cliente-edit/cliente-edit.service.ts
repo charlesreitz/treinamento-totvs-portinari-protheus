@@ -14,11 +14,11 @@ export class ClienteEditService {
   }
 
 
-  post(DATA) {
+  post(DATA: any) {
     return this.http.post<any>(`/cliente/v1`, DATA, { headers: this.headers });
   }
 
-  put(DATA, A1_COD: string, A1_LOJA: string) {
+  put(DATA: any, A1_COD: string, A1_LOJA: string) {
     return this.http.put<any>(`/cliente/v1/${A1_COD}/${A1_LOJA}`, DATA, { headers: this.headers });
   }
 

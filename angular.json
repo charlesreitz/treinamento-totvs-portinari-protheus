@@ -18,59 +18,62 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": false,
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "node_modules/@totvs/portinari-theme/css/po-theme-default.min.css" ,
+              "node_modules/@totvs/po-theme/css/po-theme-default-variables.min.css",
+              "node_modules/@totvs/po-theme/css/po-theme-default.min.css",
+              "node_modules/@po-ui/style/css/po-theme-core.min.css",
               "src/styles.css"
             ],
             "scripts": []
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "treinamento-totvs-portinari-protheus:build"
-          },
           "configurations": {
             "production": {
               "browserTarget": "treinamento-totvs-portinari-protheus:build:production"
+            },
+            "development": {
+              "browserTarget": "treinamento-totvs-portinari-protheus:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -90,39 +93,30 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@portinari/style/css/po-theme-default.min.css",
+              "node_modules/@totvs/po-theme/css/po-theme-default-variables.min.css",
+              "node_modules/@totvs/po-theme/css/po-theme-default.min.css",
+              "node_modules/@po-ui/style/css/po-theme-core.min.css",
               "src/styles.css"
             ],
             "scripts": []
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
             ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "treinamento-totvs-portinari-protheus:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "treinamento-totvs-portinari-protheus:serve:production"
-            }
           }
         }
       }
     }
   },
-  "defaultProject": "treinamento-totvs-portinari-protheus"
+  "cli": {
+    "analytics": "d088b118-4787-4041-8b0d-9c7df1134a0c",
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
+  }
 }

@@ -1,9 +1,7 @@
-import { Router } from '@angular/router';
-import { LoginService } from './login/login.service';
 import { Component } from '@angular/core';
-
-import { PoMenuItem } from '@portinari/portinari-ui';
-import { LoginComponent } from './login/login.component';
+import { LoginService } from './login/login.service';
+import { PoMenuItem } from '@po-ui/ng-components';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +9,7 @@ import { LoginComponent } from './login/login.component';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
   constructor(public loginService: LoginService, private router: Router) { }
   readonly menus: Array<PoMenuItem> = [
     { label: 'Home', link: './home' },
@@ -25,9 +24,5 @@ export class AppComponent {
       )
     },
   ];
-
-  private onClick() {
-    alert('Clicked in menu item')
-  }
 
 }

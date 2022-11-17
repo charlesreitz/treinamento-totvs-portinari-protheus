@@ -9,7 +9,7 @@ export class ClienteListService {
   constructor(private http: HttpClient) {
   }
 
-  get(PAGE) {
+  get(PAGE: number) {
     // com tela para travar
     return this.http.get('cliente/v1',
       {

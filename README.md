@@ -45,6 +45,8 @@ Ao final do treinamento aluno estará capacitado para montar um portal web com a
 ## ESLINT 
 O ESLint é uma ferramenta de análise de código que, juntamente com a sua extensão de mesmo nome disponível no VSCode, permite identificar erros quanto ao padrão de escrita que definimos. Com ele você pode, por exemplo, definir que no seu código JavaScript as sentenças sempre terminarão com ponto e vírgula o que após o último elemento de um array sempre terá uma vírgula.
 
+ng add @angular-eslint/schematics
+
 ## HTTPS
 HTTPS é de suma importância para segurança dos dados entre o CLIENT (navegador) e o Servidor (API) 
 
@@ -65,6 +67,7 @@ HTTPS é de suma importância para segurança dos dados entre o CLIENT (navegado
   * E2E
   * Serviço 
   * Unitário 
+* Cobertura de Código
 
 * https://medium.com/creditas-tech/a-pir%C3%A2mide-de-testes-a0faec465cc2
 
@@ -339,3 +342,11 @@ DebugMsg=0
 
 
 17. Tag tenantId  para buscar dados de filiais - https://tdn.totvs.com/display/framework/02.+REST+com+ERP+Microsiga+Protheus
+
+
+## Update do Angular 
+https://update.angular.io/
+
+
+## Lib's de Terceiro - Atenção 
+Cuidado ao instalar lib de terceiros no front-end, em futuras atualização será necessário compatibilizar essa LIB de terceiro. 

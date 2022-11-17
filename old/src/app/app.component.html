@@ -1,0 +1,16 @@
+<!-- <div  [ngClass]="{'po-wrapper': loginService.isLogged() }"> 
+  <po-toolbar [hidden]="!loginService.isLogged()" p-title="Treinamento Portinari Protheus"></po-toolbar>
+
+  <po-menu [hidden]="!loginService.isLogged()" [p-menus]="menus"></po-menu>
+
+  <router-outlet ></router-outlet>
+
+</div>
+   -->
+<app-login *ngIf="!loginService.isLogged()"></app-login>
+
+<div class="po-wrapper" *ngIf="loginService.isLogged()">
+  <po-toolbar p-title="Treinamento Portinari Protheus"></po-toolbar>
+  <po-menu [p-menus]="menus"></po-menu>
+  <router-outlet></router-outlet>
+</div>

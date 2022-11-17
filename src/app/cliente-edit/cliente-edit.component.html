@@ -1,56 +1,54 @@
 <po-page-default p-title="Clientes Incluir" [p-actions]="actions" [p-breadcrumb]="breadcrumb">
 
-    <form #reactiveFormData [formGroup]="reactiveForm">
-        <div class="po-row">
-            <po-input class="po-md-2" p-label="Código" formControlName="A1_COD">
-            </po-input>
-            <po-input class="po-md-1" p-label="Loja" formControlName="A1_LOJA">
-            </po-input>
-            <po-radio-group class="po-md-4" p-label="Status" formControlName="A1_MSBLQL" [p-options]="[
+  <form #reactiveFormData [formGroup]="reactiveForm">
+    <div class="po-row">
+      <po-input class="po-md-2" p-label="Código" formControlName="A1_COD">
+      </po-input>
+      <po-input class="po-md-1" p-label="Loja" formControlName="A1_LOJA">
+      </po-input>
+      <po-radio-group class="po-md-4" p-label="Status" formControlName="A1_MSBLQL" [p-options]="[
                 { label: 'Ativo', value: '2' },
                 { label: 'Inativo', value: '1' }
-            ]" p-columns="2">
-            </po-radio-group>
-        </div>
-        <div class="po-row">
-            <po-input class="po-md-12" p-label="Nome" formControlName="A1_NOME">
-            </po-input>
-        </div>
-        <div class="po-row">
-            <po-input class="po-md-12" p-label="Nome Reduzido" formControlName="A1_NREDUZ">
-            </po-input>
-        </div>
-        <div class="po-row">
-            <po-input class="po-md-12" p-label="CPF/CNPJ" formControlName="A1_CGC">
-            </po-input>
-        </div>
+            ]">
+      </po-radio-group>
+    </div>
+    <div class="po-row">
+      <po-input class="po-md-12" p-label="Nome" formControlName="A1_NOME">
+      </po-input>
+    </div>
+    <div class="po-row">
+      <po-input class="po-md-12" p-label="Nome Reduzido" formControlName="A1_NREDUZ">
+      </po-input>
+    </div>
+    <div class="po-row">
+      <po-input class="po-md-12" p-label="CPF/CNPJ" formControlName="A1_CGC">
+      </po-input>
+    </div>
 
-        <po-divider t-label="Adicionar Produto">
-        </po-divider>
-        <div class="po-row">
-            <form [formGroup]="addItemForm" class="po-md-12">
-                <po-input p-label="Seq" class="po-md-1" formControlName="ZZK_SEQ"></po-input>
-                <po-input p-label="Nome" class="po-md-3" formControlName="ZZK_NOME"></po-input>
-                <po-input p-label="Obs" class="po-md-5" formControlName="ZZK_OBS"></po-input>
-                <po-radio-group class="po-md-2" p-label="Ativo" formControlName="ZZK_MSBLQL" [p-options]="[
+    <po-divider t-label="Adicionar Produto">
+    </po-divider>
+    <div class="po-row">
+      <form [formGroup]="addItemForm" class="po-md-12">
+        <po-input p-label="Seq" class="po-md-1" formControlName="ZZK_SEQ"></po-input>
+        <po-input p-label="Nome" class="po-md-3" formControlName="ZZK_NOME"></po-input>
+        <po-input p-label="Obs" class="po-md-5" formControlName="ZZK_OBS"></po-input>
+        <po-radio-group class="po-md-2" p-label="Ativo" formControlName="ZZK_MSBLQL" [p-options]="[
                 { label: 'Ativo', value: '2' },
                 { label: 'Inativo', value: '1' }
-            ]" p-columns="2">
-                </po-radio-group>
+            ]">
+        </po-radio-group>
 
-                <po-button p-label="Salvar" class="po-md-1 po-mt-4" p-type="primary" (p-click)="setItemSave()">
-                </po-button>
-            </form>
-        </div>
-        <div class="po-row">
-            <po-table class="po-md-12" 
-            [p-actions]="actionsTable"
-            [p-columns]="columns" [p-items]="retItems()">
-            </po-table>
-        </div>
+        <po-button p-label="Salvar" class="po-md-1 po-mt-4" p-type="primary" (p-click)="setItemSave()">
+        </po-button>
+      </form>
+    </div>
+    <div class="po-row">
+      <po-table class="po-md-12" [p-actions]="actionsTable" [p-columns]="columns" [p-items]="retItems()">
+      </po-table>
+    </div>
 
 
-    </form>
+  </form>
 
 
 

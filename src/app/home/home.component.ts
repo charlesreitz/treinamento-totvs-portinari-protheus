@@ -6,10 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  public valor = 10.00; 
+  public valor = 10.00;
   constructor() { }
 
   ngOnInit() {
+    console.log('Home')
   }
 
 }

@@ -247,7 +247,7 @@ WSMETHOD PUT CLIENTE_V1 WSSERVICE CLIENTE
 			ZZK->ZZK_CLIENT = oJSon['A1_COD']
 			ZZK->ZZK_LOJA   = oJSon['A1_LOJA']
 			ZZK->ZZK_SEQ    = oJSon['ITEMS'][nI]['ZZK_SEQ']
-			ZZK->ZZK_NOME   = oJSon['ITEMS'][nI]['ZZK_NOME']
+			ZZK->ZZK_NOMAAE   = oJSon['ITEMS'][nI]['ZZK_NOME']
 			ZZK->ZZK_OBS     = oJSon['ITEMS'][nI]['ZZK_OBS']
 			ZZK->ZZK_MSBLQL = oJSon['ITEMS'][nI]['ZZK_MSBLQL']
 			ZZK->(msUnlock())

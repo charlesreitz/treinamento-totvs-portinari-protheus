@@ -1,30 +1,28 @@
-import { ClienteEditComponent } from './cliente-edit/cliente-edit.component';
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
+import { LoginService } from './../../old/src/app/login/login.service';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { ClienteEditComponent } from './cliente-edit/cliente-edit.component';
 import { ClienteListComponent } from './cliente-list/cliente-list.component';
-
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
 
-  { path: 'home', component: HomeComponent, canActivate: [LoginComponent] },
-  { path: 'login', component: LoginComponent },
+  { path: 'home', component: HomeComponent, canActivate: [LoginService] },
+  { path: 'login', component: LoginService },
   {
     path: 'client-list', component: ClienteListComponent,
-    canActivate: [LoginComponent]
+    canActivate: [LoginService]
   },
   {
-    path: 'client-edit', 
+    path: 'client-edit',
     component: ClienteEditComponent,
-    canActivate: [LoginComponent]
+    canActivate: [LoginService]
   },
-  { path: 'client-edit/:A1_COD/:A1_LOJA', component: ClienteEditComponent, canActivate: [LoginComponent] },
-  { path: '**', redirectTo: 'home', pathMatch: 'full'}
+  { path: 'client-edit/:A1_COD/:A1_LOJA', component: ClienteEditComponent, canActivate: [LoginService] },
+  { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];
 
 @NgModule({
-  //imports: [RouterModule.forRoot(routes, { useHash: true })],
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })

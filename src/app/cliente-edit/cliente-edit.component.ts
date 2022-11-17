@@ -1,8 +1,9 @@
 import { ClienteEditService } from './cliente-edit.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PoModalComponent, PoPageAction,PoTableAction, PoTableColumn, PoBreadcrumb, PoNotificationService, PoTableDetail } from '@portinari/portinari-ui';
+import { PoModalComponent, PoPageAction, PoTableAction, PoTableColumn, PoBreadcrumb, PoNotificationService, PoTableDetail } from '@po-ui/ng-components';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray, FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
+import { firstValueFrom, lastValueFrom, take } from 'rxjs';
 
 
 @Component({
@@ -52,10 +53,10 @@ export class ClienteEditComponent implements OnInit {
   ];
 
   //@ViewChild('reactiveFormData', { static: true }) reactiveFormModal: PoModalComponent;
-  public A1_COD: string;
-  public A1_LOJA: string;
-  public reactiveForm: FormGroup;
-  public addItemForm: FormGroup;
+  public A1_COD: string = '';
+  public A1_LOJA: string = '';
+  public reactiveForm = this.createReactiveForm();
+  public addItemForm = this.createReactiveFormItem();
   public buttonDisable = false;
   public readonly actions: Array<PoPageAction> = [
     { label: 'Salvar', action: () => { this.saveForm() }, disabled: this.buttonDisable },
@@ -73,23 +74,26 @@ export class ClienteEditComponent implements OnInit {
     private routeActive: ActivatedRoute,
     private router: Router,
     private poNotification: PoNotificationService,
-    private clienteEditService: ClienteEditService) { }
+    private clienteEditService: ClienteEditService) {
+
+  }
 
   ngOnInit() {
-    this.createReactiveForm();
 
-    this.routeActive.params.subscribe(async params => {
+    this.routeActive.params.subscribe(async (params: any) => {
       if (params.A1_COD) {
-        const retorno = await this.clienteEditService.getId(params.A1_COD, params.A1_LOJA).toPromise();
-        this.reactiveForm.patchValue(retorno);
+        const retorno = await this.clienteEditService.getId(params.A1_COD, params.A1_LOJA).pipe(take(1)).subscribe((retorno: any) => {
 
-        for (let i = 0; i < retorno[`ITEMS`].length; i++) {
-          const control = <FormArray>this.reactiveForm.controls['ITEMS'];
-          control.push(this.fb.group(retorno[`ITEMS`][i]));
-        }
+          this.reactiveForm.patchValue(retorno);
 
-        this.A1_COD = this.reactiveForm.get('A1_COD').value
-        this.A1_LOJA = this.reactiveForm.get('A1_LOJA').value
+          for (let i = 0; i < retorno[`ITEMS`].length; i++) {
+            const control = <FormArray>this.reactiveForm.get('ITEMS');
+            control.push(this.fb.group(retorno[`ITEMS`][i]));
+          }
+          this.A1_COD = this.reactiveForm.get('A1_COD')?.value || '';
+          this.A1_LOJA = this.reactiveForm.get('A1_LOJA')?.value || '';
+        })
+
         // for (let i = 0; i < pedidos.ITEMS.length; i++) {
         //   const control = <FormArray>this.reactiveForm.controls['ITEMS'];
         //   await control.push(this.fb.group(pedidos.ITEMS[i]));
@@ -100,43 +104,47 @@ export class ClienteEditComponent implements OnInit {
   }
 
   createReactiveForm() {
-    this.reactiveForm = this.fb.group({
-      A1_COD: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(6)])],
-      A1_LOJA: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(2)])],
-      A1_NOME: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(40)])],
-      A1_NREDUZ: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(40)])],
-      A1_CGC: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(14)])],
-      A1_MSBLQL: ['', Validators.required],
-      ITEMS: this.fb.array([])
+    return this.fb.group({
+      A1_COD: new FormControl('', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(6)])),
+      A1_LOJA: new FormControl('', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(2)])),
+      A1_NOME: new FormControl('', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(40)])),
+      A1_NREDUZ: new FormControl('', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(40)])),
+      A1_CGC: new FormControl('', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(14)])),
+      A1_MSBLQL: new FormControl('', Validators.required),
+      ITEMS: new FormArray([])
     });
 
-    this.addItemForm = this.fb.group({
-      ZZK_SEQ: '',
-      ZZK_NOME: '',
-      ZZK_OBS: '',
-      ZZK_MSBLQL: '',
-      DELETADO: '',
-    });
 
   }
+  createReactiveFormItem() {
+    return this.fb.group({
+      ZZK_SEQ: new FormControl(''),
+      ZZK_NOME: new FormControl(''),
+      ZZK_OBS: new FormControl(''),
+      ZZK_MSBLQL: new FormControl(''),
+      DELETADO: new FormControl(''),
+    });
+  }
+
 
   setItemSave() {
-    console.log(this.reactiveForm.get('ITEMS'))
     const itemsArray = this.reactiveForm.get('ITEMS') as FormArray;
     itemsArray.push(this.fb.group(this.addItemForm.value));
   }
 
   retItems() {
-    return this.reactiveForm.controls.ITEMS.value.filter((item) => item.DELETADO !== 'S');
+    const itemsArray = this.reactiveForm.get('ITEMS') as FormArray;
+    return itemsArray.value.filter((item: any) => item.DELETADO !== 'S');
   }
 
-  async  saveForm() {
+  async saveForm() {
     this.buttonDisable = true;
 
     if (this.A1_COD) {
-      await this.clienteEditService.put(JSON.stringify(this.reactiveForm.value), this.A1_COD, this.A1_LOJA).toPromise()
+      await firstValueFrom(this.clienteEditService.put(JSON.stringify(this.reactiveForm.value), this.A1_COD, this.A1_LOJA));
+
     } else {
-      await this.clienteEditService.post(JSON.stringify(this.reactiveForm.value)).toPromise()
+      await firstValueFrom(this.clienteEditService.post(JSON.stringify(this.reactiveForm.value)));
     }
 
     //this.poNotification.success({ message: `Cliente incluído com sucesso` });
@@ -146,40 +154,42 @@ export class ClienteEditComponent implements OnInit {
   }
 
 
-  setItemRemover(itemSelect) {
-    let control = <FormArray>this.reactiveForm.controls['ITEMS'];
-    console.log(control)
-    console.log(itemSelect)
-    const posC6_ITEM = control.value.findIndex((x) => x.ZZK_SEQ === itemSelect.ZZK_SEQ);
-    control.controls[posC6_ITEM].get('DELETADO').setValue('S')
+  setItemRemover(itemSelect: any) {
+    let array = <FormArray>this.reactiveForm.get('ITEMS');
+    let posC6_ITEM: number = array.value.findIndex((x: any) => x.ZZK_SEQ === itemSelect.ZZK_SEQ);
+    console.log(posC6_ITEM)
+    console.log(array)
+    array.controls[posC6_ITEM].get('DELETADO')?.setValue('S');
+
+
   }
 
-/**
- * Verifica se a string possui letras
- */
-isLetter(str) {
-  return str.match("^[a-zA-Z\(\)]+$"); 
-}
+  /**
+   * Verifica se a string possui letras
+   */
+  isLetter(str: any) {
+    return str.match("^[a-zA-Z\(\)]+$");
+  }
 
-isANumber(str){
-  return !/\D/.test(str);
-}
+  isANumber(str: any) {
+    return !/\D/.test(str);
+  }
 
 
 
-/**
- * @author CHARLES REITZ - 28/05/2019
- * @description Retorna o próximo número, alfa numerico
- *  
- *  */
- nextSequence(str) {
-  let nValor      = parseInt(str);
-  let lenCaracter = str.length
+  /**
+   * @author CHARLES REITZ - 28/05/2019
+   * @description Retorna o próximo número, alfa numerico
+   *
+   *  */
+  nextSequence(str: string) {
+    let nValor = parseInt(str);
+    let lenCaracter = str.length
 
-  if ( this.isANumber(str) && nValor < parseInt('9'.padStart(str.length,'9')) ) {
+    if (this.isANumber(str) && nValor < parseInt('9'.padStart(str.length, '9'))) {
       nValor++
-      str = nValor.toString().padStart(str.length,'0')
-  } else {
+      str = nValor.toString().padStart(str.length, '0')
+    } else {
       // Position of char to change.
       var change = str.length - 1;
       // The value of that char.
@@ -188,27 +198,27 @@ isANumber(str){
       var zeros = 0;
       // Iterate backwards while there's a z (flipping).
       while (change_char == 'Z') {
-          // Increase the length of appended zeros
-          zeros++;
-          // Move the char to change back.
-          change_char = str[--change];
+        // Increase the length of appended zeros
+        zeros++;
+        // Move the char to change back.
+        change_char = str[--change];
       }
       if (change_char == undefined) {
-          // Full flip - string increases in length.
-          str = 'A' + Array(str.length + 1).join("0");
+        // Full flip - string increases in length.
+        str = 'A' + Array(str.length + 1).join("0");
       } else {
-          // Normal increment with partial flip and 9->a handling.
-          str = str.substr(0, change)
-              + (change_char == '9' ? 'A' : String.fromCharCode(str.charCodeAt(change) + 1))
-              + Array(zeros + 1).join('0');
+        // Normal increment with partial flip and 9->a handling.
+        str = str.substr(0, change)
+          + (change_char == '9' ? 'A' : String.fromCharCode(str.charCodeAt(change) + 1))
+          + Array(zeros + 1).join('0');
       }
-      // Caso ultrapassar o limite 
+      // Caso ultrapassar o limite
       if ((str.length) > lenCaracter) {
-          str = ''.padStart(lenCaracter,'Z')
+        str = ''.padStart(lenCaracter, 'Z')
       }
-  }
-  return str;
-};
+    }
+    return str;
+  };
 
 
 

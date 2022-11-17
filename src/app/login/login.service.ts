@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    public router: Router
+  ) { }
   private headers = {
     'X-Portinari-No-Count-Pending-Requests': 'false',
     'X-Portinari-Screen-Lock': 'true'
@@ -37,17 +41,27 @@ export class LoginService {
       })
   }
 
-  setNextDataRefreshToken(secondsExpire) {
+  setNextDataRefreshToken(secondsExpire: number) {
     let dataatual = new Date()
     dataatual.setSeconds(dataatual.getSeconds() + secondsExpire - 60);
-    sessionStorage.setItem('expires_date',dataatual.toString())
+    sessionStorage.setItem('expires_date', dataatual.toString())
     return dataatual;
   }
 
 
-  refresh(refresh_token) {
+  refresh(refresh_token: string) {
     return this.http.post<any>(`api/oauth2/v1/token`, {}, { headers: this.headers, params: { grant_type: 'refresh_token', refresh_token: refresh_token } })
   }
 
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean> | boolean {
+    // const allowedRoles = route.data.allowedRoles;
 
+    if (!this.isLogged()) {
+      this.router.navigate(['/login']);
+      return false;
+    }
+    return true;
+  }
 }

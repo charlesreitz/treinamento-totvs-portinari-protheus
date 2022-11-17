@@ -5,8 +5,14 @@ import {
   PoDialogService, PoTableColumn,
   PoTableComponent, PoNotificationService,
   PoPageAction, PoBreadcrumb
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 import { take } from 'rxjs/operators';
+
+interface GetItemsData {
+  items: string[];
+  disablenext: Boolean;
+}
+
 
 @Component({
   selector: 'app-cliente-list',
@@ -14,12 +20,12 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./cliente-list.component.css']
 })
 export class ClienteListComponent implements OnInit {
-  public items = [];
-  public page = 1;
-  public disableNext = false;
+  items: Array<any> = [];
+  page = 1;
+  disableNext = false;
 
   public readonly actions: Array<PoPageAction> = [
-    { label: 'Atualizar', action: this.getItems.bind(this) , icon: 'po-icon-refresh' },
+    { label: 'Atualizar', action: this.getItems.bind(this), icon: 'po-icon-refresh' },
     { label: 'Novo', action: () => { this.router.navigate(['/client-edit']) }, icon: 'po-icon-plus' },
 
 
@@ -75,27 +81,35 @@ export class ClienteListComponent implements OnInit {
   }
 
 
-  async getItems(lShowMore?) {
+
+
+  getItems(lShowMore = false) {
 
     if (lShowMore) {
       this.page++
     } else {
-      this.items = []
+      this.items = [{ A1_NOME: 'a' }]
     }
 
-    const retorno = await this.clienteListService
-      .get(this.page).toPromise();
+    this.clienteListService
+      .get(this.page).subscribe(
+        {
+          next: (data: any) => {
+            this.items = [...data.items];
+            this.disableNext = data.disablenext;
+          }
 
-    this.items.push(...retorno['items']);
-    this.disableNext = retorno['disablenext'];
+
+        })
+
 
   }
 
-  alterar(param) {
+  alterar(param = { A1_COD: '', A1_LOJA: '' }) {
     this.router.navigate([`/client-edit/${param.A1_COD}/${param.A1_LOJA}`]);
 
   }
-  excluir(linhaTabela) {
+  excluir(linhaTabela = { A1_COD: '', A1_LOJA: '' }) {
     this.poDialog.confirm({
       literals: { cancel: 'Mudei de Idéia', confirm: 'Dale!' },
       title: `Exclusão de cliente`,
@@ -106,7 +120,7 @@ export class ClienteListComponent implements OnInit {
 
         // Remove da linha sem precisa consultar novamente o servidor,
         // ou poderia ter chamado a funcao 'this.getItems()' para atualizar nossa tabela
-        this.items.forEach((item, index) => {
+        this.items.forEach((item: { A1_COD: string; A1_LOJA: String }, index) => {
           if (linhaTabela.A1_COD + linhaTabela.A1_LOJA === item.A1_COD + item.A1_LOJA) {
             this.items.splice(index, 1);
           }

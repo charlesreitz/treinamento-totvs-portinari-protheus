@@ -14,7 +14,7 @@ import {
     HttpInterceptor
 } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { PoNotificationService } from '@portinari/portinari-ui';
+import { PoNotificationService } from '@po-ui/ng-components';
 
 @Injectable()
 
