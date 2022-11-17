@@ -36,19 +36,66 @@ Ao final do treinamento aluno estará capacitado para montar um portal web com a
 5. Sobre Licenças "Software Livre" (https://www.youtube.com/watch?v=FVy1fZhNSDA)
 
 
+## Anglar x Boas Práticas
+* Existe diversos materiais sobre práticas no angular que devem ser consultados para melhor evolução pessoal. 
+ * https://andrewrosario.medium.com/padr%C3%B5es-e-boas-pr%C3%A1ticas-em-angular-que-te-ajudar%C3%A3o-a-escalar-5001e544e7de
+ * https://github.com/andrewarosario/angular-padroes-e-boas-praticas
+ * https://www.linkedin.com/pulse/angular-estrutura-boas-pr%C3%A1ticas-e-readme-rayane-pimentel/?trk=articles_directory&originalSubdomain=pt
+
+## ESLINT 
+O ESLint é uma ferramenta de análise de código que, juntamente com a sua extensão de mesmo nome disponível no VSCode, permite identificar erros quanto ao padrão de escrita que definimos. Com ele você pode, por exemplo, definir que no seu código JavaScript as sentenças sempre terminarão com ponto e vírgula o que após o último elemento de um array sempre terá uma vírgula.
+
+## HTTPS
+HTTPS é de suma importância para segurança dos dados entre o CLIENT (navegador) e o Servidor (API) 
+
+## Como tratar permissões 
+* Criando uma controle seu, via tabelas e liberações 
+* Utilizar o conceito de privilégios do protheus
+
+## Senhas 
+* Senhas salvas no banco de dados devem ser criptografadas
+* Formas de autenticação, BASIC, JWT
+
+## Guia de Boas Práticas para  REST
+* https://tdn.totvs.com/display/public/INT/Guia+de+implementacao+das+APIs+TOTVS
+* https://api.totvs.com.br/guia
+
+## Testes 
+* Pirâmide de testes
+  * E2E
+  * Serviço 
+  * Unitário 
+
+* https://medium.com/creditas-tech/a-pir%C3%A2mide-de-testes-a0faec465cc2
+
+## Aprendizado contínuo
+1. Automatização de teste
+2. Docker 
+3. DEV-OPS 
+4. Internacionalização 
+5. Lazy Load no Angular
+
+## Se der tempo
+* Bônus - GIT (code.engpro.com.br) NG SERVENG BUILDComo publicar o projeto * Atualização do PO? * package.json
+* Ler um JSON na produção para configurar o local da API (config.json) (config.service.ts)
+* Adicionar a lista de contatos quando estiver alterando e incluindo um cliente
+* Tratar acesso com MENUDEF +    no Protheus
+
 ## Hands-on! (Mãos na massa!)
 1. Extensões para o VS CODE 
 
-* https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-close-tag
+* https://marketplace.visualstudio.com/items?itemName=Angular.ng-template
+* https://marketplace.visualstudio.com/items?itemName=cyrilletuzi.angular-schematics
 * https://marketplace.visualstudio.com/items?itemName=steoates.autoimport
-* https://marketplace.visualstudio.com/items?itemName=aeschli.vscode-css-formatter
-* https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome
-* https://marketplace.visualstudio.com/items?itemName=firefox-devtools.vscode-firefox-debug
-* https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight
-* https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree
+* https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag
+* https://marketplace.visualstudio.com/items?itemName=aeschli.vscode-css-formatter 
+* https://marketplace.visualstudio.com/items?itemName=firefox-devtools.vscode-firefox-debug 
+* https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint 
+* https://marketplace.visualstudio.com/items?itemName=donjayamanne.githistory 
+* https://marketplace.visualstudio.com/items?itemName=Zignd.html-css-class-completion 
+* https://marketplace.visualstudio.com/items?itemName=yzane.markdown-pdf
+* https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree 
 * https://marketplace.visualstudio.com/items?itemName=totvs.tds-vscode
-* https://marketplace.visualstudio.com/items?itemName=johnpapa.Angular2
-
 
 2. Seguir o passo a paso do https://portinari.io/guides/getting-started
   a. npm i -g @angular/cli@8.0.0
@@ -85,14 +132,17 @@ Ao final do treinamento aluno estará capacitado para montar um portal web com a
 
 3. Criando o Componente Login
 ``` ng g c login   ```
+
 4. Criando o Serviço login para fazer a comunicação com o backend
 ```  cd .\src\app\login\  ```
 ```  ng g s login ``` 
+
 5. Adicionando nosso componente no arquivo de rotas  **app-routing.module.ts**
 ```     const routes: Routes = [
         { path: '/login', component: LoginComponent, pathMatch: 'full'  },
         ];
 ``` 
+
 6. Adicionar nosso  ``` <router-outlet></router-outlet>  ``` ** app.component.html** 
 ```
 <div class="po-wrapper">
@@ -105,6 +155,7 @@ Ao final do treinamento aluno estará capacitado para montar um portal web com a
   </po-page-default>
 </div>
 ```
+
 7. Adicionar no menu a chamada par ao login ``` app.component.ts ```
 ```
   readonly menus: Array<PoMenuItem> = [
@@ -112,6 +163,7 @@ Ao final do treinamento aluno estará capacitado para montar um portal web com a
     { label: 'Login', link: '\login' }
   ];
 ```
+
 8. *TIP Adicionar useHash no arquivo ** app-routing.module.ts **
 ```
 @NgModule({
@@ -129,27 +181,21 @@ Ao final do treinamento aluno estará capacitado para montar um portal web com a
 
 11. Criação do CANACTIVE para bloquear acessos a paginas
 
-12. ngx-cookie-service para salvar os dados nos cookies (https://www.npmjs.com/package/ngx-cookie-service)
-``` npm install --save ngx-cookie-service ``` 
-  - Atualizado: Não usamos mais esse serviço pois utilizamos o localstorage
-???????????????????????????????????????????/
-
-13. Criação do CRUD com ReactiveForm
+12. Criação do CRUD com ReactiveForm
 
 * https://medium.com/totvsdevelopers/criando-um-crud-com-thf-iniciando-o-projeto-2bb79138eea6
 - Criação de pai e filho
 
-15. registerLocaleData ptbr
+13. registerLocaleData ptbr
 
-16. Fazer build do projeto e subir para base de produção. NG BUILD 
+14. Fazer build do projeto e subir para base de produção. NG BUILD 
 
-17. Configurando HTTPS e HTTP Serviço Protheus 
+15. Configurando HTTPS e HTTP Serviço Protheus 
 * Redirecionamento de portas NAT
 * DMZ x Infraestrutura X Segurança
 * TLS 1.2
 * Demora em rotinas padrões, exemplo pedido de venda, colocar em um JOB para fazer o processamento ao invés de incluir direto. 
 * Deixar rápido para o usuário da ponta, não fazer ele esperar
-* Problema no Safari (envia a requisição 2 vezes - ISSUE aberta na TOTVS)
 
 ```
 [environment]
@@ -291,23 +337,5 @@ DebugMsg=0
 
 ```
 
-19. Guia de Boas Práticas para  REST
-* https://tdn.totvs.com/display/public/INT/Guia+de+implementacao+das+APIs+TOTVS
-* https://api.totvs.com.br/guia
 
-20. Tag tenantId  para buscar dados de filiais - https://tdn.totvs.com/display/framework/02.+REST+com+ERP+Microsiga+Protheus
-
-
-
-## Aprendizado contínuo
-1. Automatização de teste
-2. Docker 
-3. DEV-OPS 
-4. Internacionalização 
-5. Lazy Load no Angular
-
-## Se der tempo
-* Bonus - GIT (code.engpro.com.br) NG SERVENG BUILDComo publicar o projeto * Atualização do PO? * package.json
-* Ler um JSON na produção para configurar o local da API (config.json) (config.service.ts)
-* Adicionar a lista de contatos quando estiver alterando e incluindo um cliente
-* Tratar acesso com MENUDEF +    no Protheus
+17. Tag tenantId  para buscar dados de filiais - https://tdn.totvs.com/display/framework/02.+REST+com+ERP+Microsiga+Protheus
