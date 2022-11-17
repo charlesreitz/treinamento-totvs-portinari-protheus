@@ -1,7 +1,6 @@
 import { ConfigService } from './config.service';
 import { Router } from '@angular/router';
 import { LoginService } from './../login/login.service';
-import { CookieService } from 'ngx-cookie-service';
 import { Injectable, NgModule, } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { switchMap, catchError, take, finalize, mergeMap } from 'rxjs/operators';
@@ -23,8 +22,7 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
     constructor(private thfNotification: PoNotificationService,
         private loginService: LoginService,
         private configService: ConfigService,
-        private router: Router,
-        private cookieService: CookieService
+        private router: Router
     ) {
     }
     private isRefreshingToken = false;
@@ -44,7 +42,7 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
 
         // Caso venceu o token faz o refresh
         if (!request.url.includes('/assets/config.json') && !this.isRefreshingToken && dataAtual >= dataExpire && sessionStorage.getItem('access_token')) {
-        
+
             this.isRefreshingToken = true;
 
             return this.loginService.refresh(sessionStorage.getItem('refreshtoken'))
@@ -119,7 +117,7 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
             'Accept': 'application/json; charset=UTF-8', // Quando enviado isso, o Protheus entende que deve converter para UTF8
             'Content-Type': 'application/json', // Solicita que a comunicação seja no formato JSON
             'Authorization': 'Bearer ' + sessionStorage.getItem('access_token'), // Envia o TOKEN de autenticação
-            'X-Portinari-No-Count-Pending-Requests': 'false' // Não realiza a contagem 
+            'X-Portinari-No-Count-Pending-Requests': 'false' // Não realiza a contagem
         };
         //console.log(this.configService.getHostRest())
         //console.log(`${this.configService.getHostRest()}/${request.url}`)

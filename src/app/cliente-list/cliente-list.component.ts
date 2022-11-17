@@ -19,7 +19,9 @@ export class ClienteListComponent implements OnInit {
   public disableNext = false;
 
   public readonly actions: Array<PoPageAction> = [
+    { label: 'Atualizar', action: this.getItems.bind(this) , icon: 'po-icon-refresh' },
     { label: 'Novo', action: () => { this.router.navigate(['/client-edit']) }, icon: 'po-icon-plus' },
+
 
   ];
   public readonly breadcrumb: PoBreadcrumb = {
@@ -102,7 +104,7 @@ export class ClienteListComponent implements OnInit {
         const retorno = await this.clienteListService.delete(linhaTabela.A1_COD, linhaTabela.A1_LOJA).toPromise();
         this.poNotification.success({ message: `Cliente excluido com sucesso` });
 
-        // Remove da linha sem precisa consultar novamente o servidor, 
+        // Remove da linha sem precisa consultar novamente o servidor,
         // ou poderia ter chamado a funcao 'this.getItems()' para atualizar nossa tabela
         this.items.forEach((item, index) => {
           if (linhaTabela.A1_COD + linhaTabela.A1_LOJA === item.A1_COD + item.A1_LOJA) {

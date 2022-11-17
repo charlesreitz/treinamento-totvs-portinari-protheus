@@ -12,7 +12,6 @@ import { PoTemplatesModule } from '@portinari/portinari-templates';
 import { PoPageLoginModule } from '@portinari/portinari-templates';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
-import { CookieService } from 'ngx-cookie-service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { switchMap, map, filter, catchError, take, finalize, mergeMap } from 'rxjs/operators';
 import { Observable, BehaviorSubject, Subject, ObservableInput, throwError } from 'rxjs';
@@ -29,7 +28,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HomeComponent,
     ClienteListComponent,
     ClienteEditComponent
-    
+
   ],
   imports: [
     BrowserModule,
@@ -43,14 +42,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserAnimationsModule
   ],
   providers: [
-    CookieService,
     { provide: LOCALE_ID, useValue: 'pt' },
-    // { provide: LocationStrategy, useClass: HashLocationStrategy },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     {
       provide: APP_INITIALIZER, useFactory: load, multi: true, deps: [
         HttpClient,
         ConfigService
-        
+
       ],
     },
     LoginComponent,
@@ -60,9 +58,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export class AppModule { }
 
 /**
- * Verifica se existe o arquivo config.json para definir a URL da API que vai ser utilizada para comunicação 
- * @param http 
- * @param config 
+ * Verifica se existe o arquivo config.json para definir a URL da API que vai ser utilizada para comunicação
+ * @param http
+ * @param config
  */
 export function load(http: HttpClient, config: ConfigService): (() => Promise<boolean>) {
   return (): Promise<boolean> => {
