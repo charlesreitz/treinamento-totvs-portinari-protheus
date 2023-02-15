@@ -51,12 +51,12 @@ registerLocaleData(ptBr);
     { provide: LOCALE_ID, useValue: 'pt-BR' },
     {provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
-    // {
-    //   provide: APP_INITIALIZER, useFactory: load, multi: true, deps: [
-    //     HttpClient,
-    //     ConfigService
-    //   ],
-    // },
+    {
+      provide: APP_INITIALIZER, useFactory: load, multi: true, deps: [
+        HttpClient,
+        ConfigService
+      ],
+    },
   ],
   bootstrap: [AppComponent]
 })
@@ -68,7 +68,7 @@ export class AppModule { }
  * Verifica se existe o arquivo config.json para definir a URL da API que vai ser utilizada para comunicação
  * @param http
  * @param config
- */
+//  */
 // export function load(http: HttpClient, config: ConfigService): (() => Promise<boolean>) {
 //   return (): Promise<boolean> => {
 //     return new Promise<boolean>((resolve: (a: boolean) => void): void => {
